@@ -22,7 +22,7 @@ export const setupServer = () => {
 
   app.get('/', (req, res) => {
     res.json({
-      message: 'Hello!',
+      message: 'Hello',
     });
   });
 
@@ -41,7 +41,7 @@ export const setupServer = () => {
     const contact = await getContactById(contactId);
 
     if (!contact) {
-      res.status(404).json({
+      return res.status(404).json({
         message: 'Contact not found',
       });
     }
