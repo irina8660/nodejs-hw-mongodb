@@ -17,11 +17,14 @@ import {
 export const router = Router();
 
 router.get('/contacts', ctrlWrapper(getContactsController));
-router.get('/contacts/:contactId', ctrlWrapper(getContactByIdController));
+router.get(
+  '/contacts/:contactId',
+  isValidId,
+  ctrlWrapper(getContactByIdController),
+);
 router.post(
   '/contacts',
   validateBody(createContactSchema),
-  isValidId,
   ctrlWrapper(createContactController),
 );
 router.delete(
