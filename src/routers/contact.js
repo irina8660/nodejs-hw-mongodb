@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import {
-  createContactController,
-  deleteContactController,
-  getContactByIdController,
   getContactsController,
+  getContactByIdController,
+  createContactController,
   patchContactController,
+  deleteContactController,
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { isValidId } from '../middlewares/isValidId.js';
@@ -12,29 +12,43 @@ import { validateBody } from '../middlewares/validateBody.js';
 import {
   createContactSchema,
   updateContactSchema,
-} from '../validation/contactsValidateSchema.js';
+} from '../validation/contacts.js';
+import { authenticate } from '../middlewares/authenticate.js';
+import { ROLES } from '../constants/index.js';
+import { checkRoles } from '../middlewares/checkRoles.js';
 
-export const router = Router();
+const router = Router();
 
-router.get('/contacts', ctrlWrapper(getContactsController));
+router.use(authenticate);
+
+router.get('/', checkRoles(ROLES.CONTACTS), ctrlWrapper(getContactsController));
+
 router.get(
   '/contacts/:contactId',
+  checkRoles(ROLES.CONTACTS, ROLES.PARENT),
   isValidId,
   ctrlWrapper(getContactByIdController),
 );
+
 router.post(
   '/contacts',
   validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
+
+router.patch(
+  '/contacts/:contactId',
+  checkRoles(ROLES.CONTACTS, ROLES.PARENT),
+  isValidId,
+  validateBody(updateContactSchema),
+  ctrlWrapper(patchContactController),
+);
+
 router.delete(
   '/contacts/:contactId',
+  checkRoles(ROLES.CONTACTS),
   isValidId,
   ctrlWrapper(deleteContactController),
 );
-router.patch(
-  '/contacts/:contactId',
-  validateBody(updateContactSchema),
-  isValidId,
-  ctrlWrapper(patchContactController),
-);
+
+export default router;
