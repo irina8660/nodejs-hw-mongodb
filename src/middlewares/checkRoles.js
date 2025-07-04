@@ -13,7 +13,7 @@ export const checkRoles =
     }
 
     const { role } = user;
-    if (roles.includes(ROLES.TEACHER) && role === ROLES.CONTACT) {
+    if (roles.includes(ROLES.CONTACT) && role === ROLES.CONTACT) {
       next();
       return;
     }
