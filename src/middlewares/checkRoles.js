@@ -1,3 +1,5 @@
+// src/middlewares/checkRoles.js
+
 import createHttpError from 'http-errors';
 
 import { ROLES } from '../constants/index.js';
@@ -13,7 +15,7 @@ export const checkRoles =
     }
 
     const { role } = user;
-    if (roles.includes(ROLES.CONTACT) && role === ROLES.CONTACT) {
+    if (roles.includes(ROLES.OWNER) && role === ROLES.OWNER) {
       next();
       return;
     }

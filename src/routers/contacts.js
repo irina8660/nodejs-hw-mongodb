@@ -21,32 +21,33 @@ const router = Router();
 
 router.use(authenticate);
 
-router.get('/', checkRoles(ROLES.CONTACT), ctrlWrapper(getContactsController));
+router.get('/', checkRoles(ROLES.OWNER), ctrlWrapper(getContactsController));
 
 router.get(
-  '/contacts/:contactId',
-  checkRoles(ROLES.CONTACT, ROLES.PARENT),
+  '/:contactId',
+  checkRoles(ROLES.OWNER, ROLES.PARENT),
   isValidId,
   ctrlWrapper(getContactByIdController),
 );
 
 router.post(
-  '/contacts',
+  '/',
+  checkRoles(ROLES.OWNER),
   validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
 
 router.patch(
-  '/contacts/:contactId',
-  checkRoles(ROLES.CONTACT, ROLES.PARENT),
+  '/:contactId',
+  checkRoles(ROLES.OWNER, ROLES.PARENT),
   isValidId,
   validateBody(updateContactSchema),
   ctrlWrapper(patchContactController),
 );
 
 router.delete(
-  '/contacts/:contactId',
-  checkRoles(ROLES.CONTACT),
+  '/:contactId',
+  checkRoles(ROLES.OWNER),
   isValidId,
   ctrlWrapper(deleteContactController),
 );
