@@ -11,11 +11,14 @@ import cookieParser from 'cookie-parser';
 const PORT = Number(getEnvVar('PORT', '3000'));
 
 export const setupServer = () => {
-  const app = express({
-    type: ['application/json', 'application/vnd.api+json'],
-  });
+  const app = express();
 
-  app.use(express.json());
+  app.use(
+    express.json({
+      type: ['application/json', 'application/vnd.api+json'],
+    }),
+  );
+
   app.use(cors());
 
   app.use(
@@ -25,6 +28,11 @@ export const setupServer = () => {
       },
     }),
   );
+  app.get('/', (req, res) => {
+    res.json({
+      message: 'Hello',
+    });
+  });
 
   app.use(cookieParser());
 
