@@ -1,10 +1,21 @@
 import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
+import jwt from 'jsonwebtoken';
+import handlebars from 'handlebars';
+import path from 'node:path';
+import fs from 'node:fs/promises';
 
 import { Users } from '../db/models/user.js';
-import { FIFTEEN_MINUTES, ONE_MONTH } from '../constants/index.js';
+import {
+  FIFTEEN_MINUTES,
+  ONE_MONTH,
+  SMTP,
+  TEMPLATES_DIR,
+} from '../constants/index.js';
 import { Sessions } from '../db/models/session.js';
+import { getEnvVar } from '../utils/getEnvVar.js';
+import { sendEmail } from '../utils/sendMail.js';
 
 const createSession = () => {
   const accessToken = crypto.randomBytes(30).toString('base64');
@@ -80,4 +91,60 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
 
 export const logoutUser = async (sessionId) => {
   await Sessions.deleteOne({ _id: sessionId });
+};
+
+export const sendResetEmail = async (email) => {
+  const user = await Users.findOne({ email });
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  console.log('APP_DOMAIN:', getEnvVar('APP_DOMAIN'));
+
+  const resetToken = jwt.sign(
+    {
+      sub: user._id,
+      email,
+    },
+    getEnvVar('JWT_SECRET'),
+    {
+      expiresIn: '5m',
+    },
+  );
+
+  const resetPasswordTemplatePath = path.join(
+    TEMPLATES_DIR,
+    'reset-password-email.html',
+  );
+
+  const templateSource = (
+    await fs.readFile(resetPasswordTemplatePath)
+  ).toString();
+
+  const template = handlebars.compile(templateSource);
+  const html = template({
+    name: user.name,
+    link: `${getEnvVar('APP_DOMAIN')}/reset-password?token=${resetToken}`,
+  });
+
+  await sendEmail({
+    from: getEnvVar(SMTP.SMTP_FROM),
+    to: email,
+    subject: 'Reset your password',
+    html,
+  });
+};
+
+export const resetPassword = async ({ token, password }) => {
+  const { email, sub } = jwt.verify(token, getEnvVar('JWT_SECRET'));
+
+  const user = await Users.findOne({ email, _id: sub });
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  const encryptedPassword = await bcrypt.hash(password, 10);
+
+  await Users.updateOne({ _id: user._id }, { password: encryptedPassword });
+  await Sessions.deleteOne({ userId: user._id });
 };
