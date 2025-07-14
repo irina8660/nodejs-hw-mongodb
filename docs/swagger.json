@@ -14,7 +14,7 @@
       "url": "http://localhost:3000"
     },
     {
-      "url": "https://nodejs-hw-mongodb-m5nr.onrender.com"
+      "url": "https://nodejs-hw-mongodb-b36n.onrender.com"
     }
   ],
   "tags": [
@@ -30,7 +30,9 @@
   "paths": {
     "/contacts": {
       "get": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "summary": "Get list of contacts",
         "operationId": "getContacts",
         "description": "Get list of contacts with this endpoint",
@@ -70,7 +72,10 @@
             "name": "sortOrder",
             "schema": {
               "type": "string",
-              "enum": ["asc", "desc"],
+              "enum": [
+                "asc",
+                "desc"
+              ],
               "example": "asc"
             }
           },
@@ -79,7 +84,11 @@
             "name": "contactType",
             "schema": {
               "type": "string",
-              "enum": ["work", "home", "personal"],
+              "enum": [
+                "work",
+                "home",
+                "personal"
+              ],
               "example": "personal"
             }
           },
@@ -99,7 +108,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -164,7 +177,9 @@
         }
       },
       "post": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "summary": "Create a contact",
         "operationId": "createContact",
         "description": "Create a contact with form-data including optional image upload",
@@ -179,13 +194,12 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": ["name", "phoneNumber", "contactType"],
+                "required": [
+                  "name",
+                  "phoneNumber",
+                  "contactType"
+                ],
                 "properties": {
-                  "userId": {
-                    "description": "User`s ID who has this contact (MongoDB ObjectId)",
-                    "type": "string",
-                    "example": "686809896ac14799aa90b54a"
-                  },
                   "name": {
                     "description": "Contact`s name",
                     "type": "string",
@@ -209,7 +223,11 @@
                   "contactType": {
                     "description": "Type of contact",
                     "type": "string",
-                    "enum": ["work", "home", "personal"],
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ],
                     "example": "personal"
                   },
                   "photo": {
@@ -229,7 +247,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -256,7 +278,9 @@
     },
     "/contacts/{contactId}": {
       "get": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "summary": "Get contact by id",
         "operationId": "getContact",
         "description": "Get contact by id",
@@ -283,7 +307,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -308,7 +336,9 @@
         }
       },
       "patch": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "summary": "Update a contact",
         "operationId": "updateContact",
         "description": "Update a contact with form-data including image upload",
@@ -352,13 +382,17 @@
                   },
                   "contactType": {
                     "type": "string",
-                    "enum": ["work", "home", "personal"],
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ],
                     "example": "personal"
                   },
                   "photo": {
                     "type": "string",
                     "format": "binary",
-                    "example": "https://res.cloudinary.com/dsd3a9vxa/image/upload/v1752525617/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_2025-07-14_%D0%B2_19.28.27_tnv0eo.png"
+                    "example": "https://res.cloudinary.com/drmxffjdy/image/upload/v1752021581/jrt0o1uc0gec25qefjqs.png"
                   }
                 }
               }
@@ -372,7 +406,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -397,7 +435,9 @@
         }
       },
       "delete": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "summary": "Delete contact by id",
         "operationId": "deleteContact",
         "description": "Delete contact by id",
@@ -442,7 +482,12 @@
     "schemas": {
       "contact": {
         "type": "object",
-        "required": ["_id", "name", "phoneNumber", "contactType"],
+        "required": [
+          "_id",
+          "name",
+          "phoneNumber",
+          "contactType"
+        ],
         "properties": {
           "_id": {
             "description": "Contact`s unique ID (MongoDB ObjectId)",
@@ -477,7 +522,11 @@
           "contactType": {
             "description": "Type of contact",
             "type": "string",
-            "enum": ["work", "home", "personal"],
+            "enum": [
+              "work",
+              "home",
+              "personal"
+            ],
             "example": "personal"
           },
           "photo": {
@@ -496,7 +545,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "data"],
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -508,7 +561,9 @@
                 },
                 "data": {
                   "type": "object",
-                  "required": ["message"],
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
                     "message": {
                       "type": "string",
@@ -527,7 +582,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "data"],
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -539,7 +598,9 @@
                 },
                 "data": {
                   "type": "object",
-                  "required": ["message"],
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
                     "message": {
                       "type": "string",
