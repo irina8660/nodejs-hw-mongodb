@@ -33,3 +33,10 @@ export const resetPasswordSchema = Joi.object({
     'string.min': 'Password must be at least 6 characters',
   }),
 });
+
+export const loginWithGoogleOAuthSchema = Joi.object({
+  code: Joi.string().required().messages({
+    'any.required': 'Authorization code is required',
+    'string.empty': 'Authorization code cannot be empty',
+  }),
+});
